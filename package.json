@@ -4,6 +4,10 @@
   "description": "Automatically fixes missing python imports",
   "publisher": "siddseethepalli",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/siddseethepalli/vscode-python-auto-import"
+  },
   "engines": {
     "vscode": "^1.62.0"
   },
