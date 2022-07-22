@@ -60,7 +60,7 @@ class ImportFixer:
 
         return suggestions
 
-    def apply_suggestions(
+    def _apply_suggestions(
         self, contents: str, suggestions: dict[str, tuple[str | None, str]]
     ):
         # Decide which line to insert the imports on
@@ -100,4 +100,4 @@ class ImportFixer:
         lines = contents.splitlines()
         lines_with_imports = lines[:start_line] + imports + lines[start_line:]
 
-        return "\n".join(lines_with_imports)
+        return "\n".join(lines_with_imports).strip()

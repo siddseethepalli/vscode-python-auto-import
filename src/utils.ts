@@ -22,7 +22,7 @@ export function getCurrentPythonPath(): string | null {
 
 
 function extensionConfig(property: string): string {
-    const config = vscode.workspace.getConfiguration("python=auto-importer");
+    const config = vscode.workspace.getConfiguration("python-auto-importer");
     const subConfig = config.get(property);
 
     if (typeof subConfig === "undefined") {

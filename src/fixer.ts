@@ -30,8 +30,6 @@ export function fixImports(): void {
     }
 
     write(editor, transformedCode);
-
-    formatFile(filePath);
 }
 
 function getIndexPath(filePath: string): string | null {
@@ -84,7 +82,11 @@ function write(editor: vscode.TextEditor, code: string): void {
 
     edit.set(editor.document.uri, [updateCode]);
 
-    vscode.workspace.applyEdit(edit);
+    vscode.workspace.applyEdit(edit).then(() => {
+        editor.document.save().then(() => {
+            formatFile(editor.document.fileName);
+        });
+    });
 }
 
 function formatFile(filePath: string): void {
@@ -94,6 +96,8 @@ function formatFile(filePath: string): void {
         return;
     }
 
-    cp.execSync(`${pyBin} -m isort ${filePath}`);
-    cp.execSync(`${pyBin} -m black ${filePath}`);
+    const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
+
+    cp.execSync(`cd ${dirPath} && ${pyBin} -m isort ${filePath}`);
+    cp.execSync(`cd ${dirPath} && ${pyBin} -m black ${filePath}`);
 }
