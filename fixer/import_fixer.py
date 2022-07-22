@@ -70,12 +70,12 @@ class ImportFixer:
         for element in tree.body:
             # Check for docstrings
             if type(element) == ast.Expr and type(element.value) == ast.Constant:
-                start_line = element.lineno
+                start_line = element.lineno + 1
                 continue
 
             # Check for __team__
             if type(element) == ast.Assign and element.targets[0].id == "__team__":
-                start_line = element.lineno
+                start_line = element.lineno + 1
                 continue
 
             break
