@@ -17,4 +17,5 @@ python3.10 -m venv <path-to-venv>
 In your vscode `settings.json` set `python-auto-importer.pythonInterpreterPath` to the virtualenv's python.
 
 ## Key bindings
-Fix imports for a file: `Cmd + Shift + I`
+Fix imports (for the current file): `Cmd + Shift + I`
+Rebuild index (for the current project): `Cmd + Shift + J`

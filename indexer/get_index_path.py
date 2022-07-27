@@ -13,4 +13,5 @@ if __name__ == "__main__":
     builder = IndexBuilder()
     index_path = builder.get_index_path(file_path)
 
-    print(index_path)
+    if index_path:
+        print(index_path)

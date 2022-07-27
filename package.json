@@ -3,7 +3,7 @@
   "displayName": "Python Auto Importer",
   "description": "Automatically fixes missing python imports",
   "publisher": "siddseethepalli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/siddseethepalli/vscode-python-auto-import"
@@ -15,7 +15,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:python-auto-importer.autoImportPython"
+    "onCommand:python-auto-importer.autoImportPython",
+    "onCommand:python-auto-importer.buildIndex"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -23,6 +24,10 @@
       {
         "command": "python-auto-importer.autoImportPython",
         "title": "Auto Import Python"
+      },
+      {
+        "command": "python-auto-importer.buildIndex",
+        "title": "Rebuild Index"
       }
     ],
     "configuration": [
@@ -41,6 +46,12 @@
         "command": "python-auto-importer.autoImportPython",
         "key": "ctrl+shift+i",
         "mac": "cmd+shift+i",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "python-auto-importer.buildIndex",
+        "key": "ctrl+shift+j",
+        "mac": "cmd+shift+j",
         "when": "editorTextFocus"
       }
     ]

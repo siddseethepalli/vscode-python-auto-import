@@ -18,7 +18,11 @@ export function fixImports(): void {
         return;
     }
 
-    const indexPath = getIndexPath(filePath);
+    let indexPath = getIndexPath(filePath);
+    if (!indexPath) {
+        buildIndexForFile(filePath);
+        indexPath = getIndexPath(filePath);
+    }
     if (!indexPath) {
         vscode.window.showErrorMessage("Unable to create index");
         return;
@@ -32,6 +36,40 @@ export function fixImports(): void {
     write(editor, transformedCode);
 }
 
+export function buildIndex(): void {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showErrorMessage("There's no active editor");
+        return;
+    }
+
+    const filePath = editor.document.fileName;
+    if (!filePath.endsWith(".py")) {
+        vscode.window.showErrorMessage("This is not a python file");
+        return;
+    }
+
+    buildIndexForFile(filePath);
+}
+
+function buildIndexForFile(filePath: string): void {
+    const pyBin = utils.getExtensionPythonPath();
+    if (!pyBin) {
+        vscode.window.showErrorMessage("No python interpreter found");
+        return;
+    }
+
+    const extPath = vscode.extensions.getExtension("siddseethepalli.python-auto-importer")
+        ?.extensionPath as string;
+    const script = path.join(extPath, "indexer", "build_index.py");
+
+    try {
+        cp.execSync(`${pyBin} ${script} ${filePath}`);
+    } catch (error: any) {
+        vscode.window.showErrorMessage(error.message);
+    }
+}
+
 function getIndexPath(filePath: string): string | null {
     const pyBin = utils.getExtensionPythonPath();
     if (!pyBin) {
@@ -41,7 +79,7 @@ function getIndexPath(filePath: string): string | null {
 
     const extPath = vscode.extensions.getExtension("siddseethepalli.python-auto-importer")
         ?.extensionPath as string;
-    const script = path.join(extPath, "indexer", "main.py");
+    const script = path.join(extPath, "indexer", "get_index_path.py");
 
     try {
         const result = cp.execSync(`${pyBin} ${script} ${filePath}`);
@@ -60,7 +98,7 @@ function getFixedFileContents(filePath: string, indexPath: string): string | nul
 
     const extPath = vscode.extensions.getExtension("siddseethepalli.python-auto-importer")
         ?.extensionPath as string;
-    const script = path.join(extPath, "fixer", "main.py");
+    const script = path.join(extPath, "fixer", "fix.py");
 
     try {
         const result = cp.execSync(`${pyBin} ${script} ${filePath} --index-path ${indexPath}`);
